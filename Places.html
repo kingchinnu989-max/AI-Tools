@@ -1,0 +1,764 @@
+Here is the full code. Save it as index.html and open with VS Code Live Server (or double-click to open in any browser).
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wanderlust — A Tourism Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #f6f1ea;
+      --bg-2: #ece3d4;
+      --ink: #1c1a17;
+      --muted: #6b6358;
+      --accent: #b85c38;
+      --accent-2: #2e5a3b;
+      --line: #d9cfbe;
+      --card: #fffdf9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    ::selection { background: var(--accent); color: #fff; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 6%;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(246, 241, 234, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s ease;
+    }
+    nav.scrolled { border-bottom-color: var(--line); }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -.5px;
+    }
+    .logo span { color: var(--accent); font-style: italic; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--ink); text-decoration: none; font-size: .9rem;
+      font-weight: 500; position: relative; transition: color .3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -6px; left: 0;
+      width: 0; height: 2px; background: var(--accent);
+      transition: width .3s ease;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+    .menu-btn { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--ink); }
+
+    .hero {
+      min-height: 100vh;
+      padding: 140px 6% 80px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+    }
+    .hero-text .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 24px;
+    }
+    .eyebrow::before {
+      content: ''; width: 36px; height: 1px; background: var(--accent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 500; line-height: 1.05;
+      letter-spacing: -1.5px; margin-bottom: 24px;
+    }
+    .hero h1 em { color: var(--accent); font-style: italic; }
+    .hero p {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 480px; margin-bottom: 36px;
+    }
+    .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn {
+      padding: 14px 28px; border: none; cursor: pointer;
+      font-family: inherit; font-size: .9rem; font-weight: 500;
+      border-radius: 999px; transition: all .3s ease;
+      display: inline-flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--ink); color: #fff; }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--ink);
+      border: 1px solid var(--ink);
+    }
+    .btn-outline:hover { background: var(--ink); color: #fff; }
+
+    .hero-visual { position: relative; height: 540px; }
+    .hero-img {
+      position: absolute; border-radius: 8px; overflow: hidden;
+      box-shadow: 0 30px 60px -20px rgba(0,0,0,.25);
+    }
+    .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-img-1 { width: 65%; height: 70%; top: 0; right: 0; }
+    .hero-img-2 { width: 55%; height: 55%; bottom: 0; left: 0; border: 8px solid var(--bg); }
+    .hero-stat {
+      position: absolute; bottom: 40px; right: -10px;
+      background: var(--card); padding: 18px 22px;
+      border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,.1);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .hero-stat strong {
+      font-family: 'Playfair Display', serif; font-size: 1.6rem;
+      color: var(--accent);
+    }
+    .hero-stat span { font-size: .8rem; color: var(--muted); display: block; }
+
+    section { padding: 100px 6%; }
+    .section-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 60px; gap: 40px; flex-wrap: wrap;
+    }
+    .section-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 500;
+      line-height: 1.1; letter-spacing: -1px; max-width: 600px;
+    }
+    .section-head h2 em { color: var(--accent); font-style: italic; }
+    .section-head p { color: var(--muted); max-width: 380px; }
+
+    .places-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+    }
+    .place-card {
+      background: var(--card);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .4s ease, box-shadow .4s ease;
+      border: 1px solid var(--line);
+    }
+    .place-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 50px -20px rgba(0,0,0,.15);
+    }
+    .place-img { width: 100%; height: 260px; overflow: hidden; position: relative; }
+    .place-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s ease; }
+    .place-card:hover .place-img img { transform: scale(1.08); }
+    .place-tag {
+      position: absolute; top: 14px; left: 14px;
+      background: rgba(255,255,255,.95); color: var(--ink);
+      padding: 6px 12px; border-radius: 999px;
+      font-size: .7rem; font-weight: 500; letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    .place-tag.india { color: var(--accent); }
+    .place-tag.world { color: var(--accent-2); }
+    .place-body { padding: 24px; }
+    .place-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; margin-bottom: 6px; font-weight: 500;
+    }
+    .place-loc {
+      display: flex; align-items: center; gap: 6px;
+      color: var(--muted); font-size: .85rem; margin-bottom: 14px;
+    }
+    .place-desc {
+      font-size: .92rem; color: var(--muted);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .place-foot {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line);
+    }
+    .place-price strong {
+      font-family: 'Playfair Display', serif; color: var(--accent); font-size: 1.1rem;
+    }
+    .place-price span { font-size: .75rem; color: var(--muted); }
+    .place-link {
+      font-size: .85rem; font-weight: 500; color: var(--ink);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: gap .3s, color .3s;
+    }
+    .place-card:hover .place-link { gap: 12px; color: var(--accent); }
+
+    .filters { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+    .pill {
+      padding: 8px 18px; border: 1px solid var(--line);
+      background: transparent; cursor: pointer;
+      border-radius: 999px; font-family: inherit; font-size: .85rem;
+      color: var(--muted); transition: all .3s;
+    }
+    .pill:hover { color: var(--ink); border-color: var(--ink); }
+    .pill.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+    .about {
+      background: var(--bg-2);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .about-img { height: 480px; border-radius: 12px; overflow: hidden; }
+    .about-img img { width: 100%; height: 100%; object-fit: cover; }
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 500;
+      line-height: 1.1; margin-bottom: 24px; letter-spacing: -.5px;
+    }
+    .about-text h2 em { color: var(--accent); font-style: italic; }
+    .about-text p { color: var(--muted); margin-bottom: 20px; font-size: 1rem; }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; margin-top: 36px;
+    }
+    .stat strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem; color: var(--accent); display: block;
+    }
+    .stat span { color: var(--muted); font-size: .85rem; }
+
+    .forms-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+    .form-card {
+      background: var(--card);
+      padding: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+    .form-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; margin-bottom: 8px; font-weight: 500;
+    }
+    .form-card .sub { color: var(--muted); margin-bottom: 28px; font-size: .9rem; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: .8rem; margin-bottom: 8px;
+      color: var(--ink); font-weight: 500; letter-spacing: .3px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 12px 14px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px; font-family: inherit; font-size: .92rem;
+      color: var(--ink); transition: all .3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none; border-color: var(--accent);
+      background: var(--card);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-msg {
+      margin-top: 14px; font-size: .85rem; min-height: 20px;
+      color: var(--accent-2); font-weight: 500;
+    }
+
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(28, 26, 23, .65);
+      backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 200; padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--card); border-radius: 16px;
+      max-width: 900px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      animation: modalIn .4s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-img { height: 100%; min-height: 400px; }
+    .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-body { padding: 40px; position: relative; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .3s;
+    }
+    .modal-close:hover { background: var(--ink); color: #fff; }
+    .modal-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; margin-bottom: 6px; font-weight: 500;
+    }
+    .modal-body .modal-loc {
+      color: var(--accent); font-size: .85rem; margin-bottom: 20px;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .modal-body p { color: var(--muted); margin-bottom: 18px; font-size: .95rem; }
+    .modal-meta {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      margin-bottom: 24px; padding: 18px; background: var(--bg);
+      border-radius: 10px;
+    }
+    .modal-meta div span {
+      display: block; font-size: .7rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+    }
+    .modal-meta div strong { font-size: .95rem; }
+
+    footer {
+      background: var(--ink); color: #d9cfbe;
+      padding: 60px 6% 30px;
+    }
+    .foot-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 60px; margin-bottom: 40px;
+    }
+    .foot-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.8rem;
+      color: #fff; margin-bottom: 12px;
+    }
+    .foot-logo span { color: var(--accent); font-style: italic; }
+    .foot-grid p { font-size: .9rem; max-width: 320px; }
+    .foot-grid h4 { color: #fff; margin-bottom: 16px; font-size: .95rem; }
+    .foot-grid ul { list-style: none; }
+    .foot-grid ul li { margin-bottom: 8px; font-size: .88rem; }
+    .foot-grid ul li a { color: #d9cfbe; text-decoration: none; transition: color .3s; }
+    .foot-grid ul li a:hover { color: var(--accent); }
+    .socials { display: flex; gap: 14px; margin-top: 20px; }
+    .socials a {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; text-decoration: none; transition: all .3s;
+    }
+    .socials a:hover { background: var(--accent); transform: translateY(-3px); }
+    .foot-bottom {
+      border-top: 1px solid rgba(255,255,255,.08); padding-top: 24px;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      font-size: .82rem;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-btn { display: block; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--bg); padding: 24px 6%;
+        border-bottom: 1px solid var(--line); gap: 18px;
+      }
+      .hero { grid-template-columns: 1fr; padding-top: 110px; }
+      .hero-visual { height: 420px; }
+      .about { grid-template-columns: 1fr; gap: 40px; }
+      .about-img { height: 320px; }
+      .forms-section { grid-template-columns: 1fr; gap: 30px; }
+      .modal { grid-template-columns: 1fr; }
+      .modal-img { min-height: 240px; max-height: 240px; }
+      .foot-grid { grid-template-columns: 1fr; gap: 30px; }
+      section { padding: 70px 6%; }
+      .form-card { padding: 30px; }
+    }
+    @media (max-width: 500px) {
+      .form-row { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .modal-meta { grid-template-columns: 1fr; }
+    }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: all .8s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="logo">Wander<span>lust</span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#places">Destinations</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#booking">Booking</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+  </nav>
+
+  <header class="hero" id="home">
+    <div class="hero-text">
+      <div class="eyebrow">A Curated Travel Portfolio</div>
+      <h1>Stories <em>etched</em> in stone, sea & sky.</h1>
+      <p>Ten remarkable destinations — five wonders within India and five across the world — handpicked for travellers who chase meaning, not just miles.</p>
+      <div class="cta-row">
+        <a href="#places" class="btn btn-primary">Explore Destinations <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="#booking" class="btn btn-outline">Plan Your Trip</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img hero-img-1">
+        <img src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=900&auto=format&fit=crop" alt="Taj Mahal" />
+      </div>
+      <div class="hero-img hero-img-2">
+        <img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?w=900&auto=format&fit=crop" alt="Santorini" />
+      </div>
+      <div class="hero-stat">
+        <strong>10</strong>
+        <span>Iconic places<br/>One journey</span>
+      </div>
+    </div>
+  </header>
+
+  <section id="places">
+    <div class="section-head reveal">
+      <h2>Featured <em>destinations</em>, hand-picked for wanderers.</h2>
+      <p>Five soulful corners of India paired with five wonders the world calls its own.</p>
+    </div>
+
+    <div class="filters reveal">
+      <button class="pill active" data-filter="all">All</button>
+      <button class="pill" data-filter="india">India</button>
+      <button class="pill" data-filter="world">World Wonders</button>
+    </div>
+
+    <div class="places-grid" id="placesGrid"></div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="about-img reveal">
+      <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1000&auto=format&fit=crop" alt="Travel" />
+    </div>
+    <div class="about-text reveal">
+      <h2>Built by <em>travellers</em>, for those who keep wandering.</h2>
+      <p>Wanderlust is a small studio of writers, photographers and route-planners. We chart slow, deliberate journeys — the kind where you actually meet a place, not just photograph it.</p>
+      <p>Every destination here has been walked, eaten through, and slept in. This portfolio is our love letter to ten of them.</p>
+      <div class="stats-grid">
+        <div class="stat"><strong>10</strong><span>Iconic destinations</span></div>
+        <div class="stat"><strong>40+</strong><span>Local guides</span></div>
+        <div class="stat"><strong>5k</strong><span>Happy travellers</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="booking">
+    <div class="section-head reveal">
+      <h2>Send an <em>inquiry</em> or simply say hello.</h2>
+      <p>Tell us where your heart is pointing — we'll handle the rest.</p>
+    </div>
+
+    <div class="forms-section">
+      <div class="form-card reveal">
+        <h3>Booking Inquiry</h3>
+        <p class="sub">Curate your perfect itinerary with us.</p>
+        <form id="bookingForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="b-name">Full Name</label>
+              <input type="text" id="b-name" required />
+            </div>
+            <div class="form-group">
+              <label for="b-email">Email</label>
+              <input type="email" id="b-email" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="b-dest">Destination</label>
+            <select id="b-dest" required>
+              <option value="">Select a place</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="b-date">Travel Date</label>
+              <input type="date" id="b-date" required />
+            </div>
+            <div class="form-group">
+              <label for="b-guests">Travellers</label>
+              <input type="number" id="b-guests" min="1" max="20" value="2" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="b-notes">Notes</label>
+            <textarea id="b-notes" placeholder="Tell us about your preferences..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Inquiry <i class="fa-solid fa-paper-plane"></i></button>
+          <div class="form-msg" id="bookingMsg"></div>
+        </form>
+      </div>
+
+      <div class="form-card reveal" id="contact">
+        <h3>Get in Touch</h3>
+        <p class="sub">For questions, collaborations or a friendly hi.</p>
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="c-name">Name</label>
+            <input type="text" id="c-name" required />
+          </div>
+          <div class="form-group">
+            <label for="c-email">Email</label>
+            <input type="email" id="c-email" required />
+          </div>
+          <div class="form-group">
+            <label for="c-subject">Subject</label>
+            <input type="text" id="c-subject" required />
+          </div>
+          <div class="form-group">
+            <label for="c-message">Message</label>
+            <textarea id="c-message" required placeholder="Write your message..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message <i class="fa-solid fa-arrow-right"></i></button>
+          <div class="form-msg" id="contactMsg"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal-img"><img id="modalImg" src="" alt="" /></div>
+      <div class="modal-body">
+        <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+        <h3 id="modalTitle"></h3>
+        <div class="modal-loc" id="modalLoc"></div>
+        <p id="modalDesc"></p>
+        <div class="modal-meta">
+          <div><span>Best Season</span><strong id="modalSeason"></strong></div>
+          <div><span>Duration</span><strong id="modalDuration"></strong></div>
+          <div><span>From</span><strong id="modalPrice"></strong></div>
+          <div><span>Category</span><strong id="modalCat"></strong></div>
+        </div>
+        <a href="#booking" class="btn btn-primary" id="modalBook">Book This Trip <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo">Wander<span>lust</span></div>
+        <p>A curated portfolio of ten unforgettable destinations — handpicked, walked, and written about by the team.</p>
+        <div class="socials">
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#places">Destinations</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#booking">Booking</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><i class="fa-solid fa-envelope"></i> hello@wanderlust.travel</li>
+          <li><i class="fa-solid fa-phone"></i> +91 98765 43210</li>
+          <li><i class="fa-solid fa-location-dot"></i> Mumbai · Paris</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2025 Wanderlust. All rights reserved.</span>
+      <span>Crafted with curiosity ✦</span>
+    </div>
+  </footer>
+
+  <script>
+    const places = [
+      {
+        id: 1, name: "Taj Mahal", loc: "Agra, India", cat: "india",
+        img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1200&auto=format&fit=crop",
+        desc: "A monument of love carved in white marble — the Taj Mahal at dawn is one of the most quietly powerful sights in the world.",
+        long: "Commissioned in 1632 by Mughal emperor Shah Jahan in memory of his beloved wife, the Taj Mahal is the crown jewel of Indo-Islamic architecture. Walk its symmetrical gardens, watch the marble shift from peach to silver as light moves, and discover why it remains a wonder of the world.",
+        season: "Oct – Mar", duration: "2 days", price: "₹12,000"
+      },
+      {
+        id: 2, name: "Jaipur", loc: "Rajasthan, India", cat: "india",
+        img: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=1200&auto=format&fit=crop",
+        desc: "The Pink City — a labyrinth of palaces, bazaars and rooftop chai with views of the Amer Fort.",
+        long: "Jaipur, capital of Rajasthan, is a swirl of terracotta walls, royal palaces, and bustling bazaars. Explore the Hawa Mahal, lose yourself in Johari Bazaar, and end the day on a rooftop café watching kites dance above the old city.",
+        season: "Nov – Feb", duration: "4 days", price: "₹18,000"
+      },
+      {
+        id: 3, name: "Kerala Backwaters", loc: "Alleppey, India", cat: "india",
+        img: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=1200&auto=format&fit=crop",
+        desc: "Drift through a green labyrinth of palm-fringed canals aboard a traditional houseboat.",
+        long: "The Kerala backwaters are a network of brackish lagoons, lakes, and canals stretched along the Arabian Sea. Board a kettuvallam — a traditional rice-barge-turned-houseboat — and float past villages frozen in another time. Fresh karimeen for dinner, fireflies for company.",
+        season: "Sep – Mar", duration: "3 days", price: "₹15,000"
+      },
+      {
+        id: 4, name: "Varanasi", loc: "Uttar Pradesh, India", cat: "india",
+        img: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=1200&auto=format&fit=crop",
+        desc: "The world's oldest living city — where the Ganges hosts fire, prayer and morning light.",
+        long: "Varanasi is older than history, older than tradition. Witness the evening Ganga Aarti at Dashashwamedh Ghat, take a sunrise boat ride past pilgrims in prayer, and lose yourself in alleys that smell of marigolds, kachoris, and incense.",
+        season: "Oct – Mar", duration: "3 days", price: "₹14,000"
+      },
+      {
+        id: 5, name: "Ladakh", loc: "Leh, India", cat: "india",
+        img: "https://images.unsplash.com/photo-1589793907316-f94025b46850?w=1200&auto=format&fit=crop",
+        desc: "Moonscapes, monasteries and mountain passes above the clouds in the high Himalayas.",
+        long: "Ladakh is a high-altitude desert where prayer flags flutter against impossibly blue skies. Visit Pangong Lake, ride to Khardung La, sip butter tea inside ancient gompas, and feel the silence of the Himalayas press in on every side.",
+        season: "May – Sep", duration: "7 days", price: "₹35,000"
+      },
+      {
+        id: 6, name: "Eiffel Tower", loc: "Paris, France", cat: "world",
+        img: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=1200&auto=format&fit=crop",
+        desc: "Paris's iron lady — equal parts engineering marvel and timeless romance.",
+        long: "Built for the 1889 World's Fair, the Eiffel Tower has become the silhouette of Paris itself. Climb to the second floor for skyline views, picnic on the Champ de Mars at sunset, and stay long enough to catch the hourly sparkle after dark.",
+        season: "Apr – Jun", duration: "5 days", price: "₹1,20,000"
+      },
+      {
+        id: 7, name: "Great Wall of China", loc: "Beijing, China", cat: "world",
+        img: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1200&auto=format&fit=crop",
+        desc: "A 13,000-mile ribbon of stone draped across mountains and time.",
+        long: "More a network than a single wall, the Great Wall winds across deserts, grasslands, and rugged peaks. Trek the wild, unrestored section at Jiankou for raw beauty, or walk Mutianyu for cable-car ease — both leave you humbled by the scale of human ambition.",
+        season: "Sep – Nov", duration: "6 days", price: "₹1,05,000"
+      },
+      {
+        id: 8, name: "Machu Picchu", loc: "Cusco, Peru", cat: "world",
+        img: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=1200&auto=format&fit=crop",
+        desc: "An Incan citadel suspended in cloud — terraced into the Andes at 2,430 metres.",
+        long: "Rediscovered in 1911 and barely touched by colonial hands, Machu Picchu is a 15th-century Inca masterpiece perched between two sharp peaks. Hike the Inca Trail or take the train via Aguas Calientes — either way, your first sight at sunrise is unforgettable.",
+        season: "May – Sep", duration: "8 days", price: "₹1,85,000"
+      },
+      {
+        id: 9, name: "Santorini", loc: "Cyclades, Greece", cat: "world",
+        img: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200&auto=format&fit=crop",
+        desc: "Whitewashed villages, cobalt domes and the planet's most theatrical sunset over the caldera.",
+        long: "Born from one of the largest volcanic eruptions in history, Santorini's crescent shape cradles the Aegean. Stay in Oia for the iconic sunset, swim from the red-sand beach at Akrotiri, and dine on fresh tomatoes and fava beside the sea.",
+        season: "May – Oct", duration: "6 days", price: "₹1,40,000"
+      },
+      {
+        id: 10, name: "Petra", loc: "Ma'an, Jordan", cat: "world",
+        img: "file:///C:/Users/RK/Desktop/New%20folder/petra",
+        desc: "The Rose City — a 2,000-year-old Nabataean capital carved into pink sandstone cliffs.",
+        long: "Approach Petra through the Siq, a narrow canyon that opens dramatically onto the Treasury's rose-coloured façade. Climb 800 steps to the Monastery, ride a camel through the Royal Tombs, and stay overnight for Petra by Candlelight.",
+        season: "Mar – May", duration: "5 days", price: "₹1,25,000"
+      }
+    ];
+
+    const grid = document.getElementById('placesGrid');
+    function renderPlaces(filter = 'all') {
+      grid.innerHTML = '';
+      const list = filter === 'all' ? places : places.filter(p => p.cat === filter);
+      list.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'place-card reveal';
+        card.style.transitionDelay = `${i * 60}ms`;
+        card.innerHTML = `
+          <div class="place-img">
+            <img src="${p.img}" alt="${p.name}" loading="lazy" />
+            <span class="place-tag ${p.cat}">${p.cat === 'india' ? 'India' : 'World Wonder'}</span>
+          </div>
+          <div class="place-body">
+            <h3>${p.name}</h3>
+            <div class="place-loc"><i class="fa-solid fa-location-dot"></i> ${p.loc}</div>
+            <p class="place-desc">${p.desc}</p>
+            <div class="place-foot">
+              <div class="place-price"><strong>${p.price}</strong> <span>/ person</span></div>
+              <span class="place-link">View details <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </div>`;
+        card.addEventListener('click', () => openModal(p));
+        grid.appendChild(card);
+      });
+      observeReveals();
+    }
+    renderPlaces();
+
+    document.querySelectorAll('.pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderPlaces(btn.dataset.filter);
+      });
+    });
+
+    const modal = document.getElementById('modal');
+    function openModal(p) {
+      document.getElementById('modalImg').src = p.img;
+      document.getElementById('modalTitle').textContent = p.name;
+      document.getElementById('modalLoc').textContent = p.loc;
+      document.getElementById('modalDesc').textContent = p.long;
+      document.getElementById('modalSeason').textContent = p.season;
+      document.getElementById('modalDuration').textContent = p.duration;
+      document.getElementById('modalPrice').textContent = p.price + ' / person';
+      document.getElementById('modalCat').textContent = p.cat === 'india' ? 'India' : 'World Wonder';
+      document.getElementById('modalBook').addEventListener('click', () => {
+        document.getElementById('b-dest').value = p.name;
+      }, { once: true });
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    const sel = document.getElementById('b-dest');
+    places.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.name;
+      opt.textContent = `${p.name} — ${p.loc}`;
+      sel.appendChild(opt);
+    });
+
+    document.getElementById('bookingForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const msg = document.getElementById('bookingMsg');
+      msg.textContent = '✓ Thank you! Your inquiry has been received. We\'ll be in touch within 24 hours.';
+      e.target.reset();
+      setTimeout(() => msg.textContent = '', 6000);
+    });
+    document.getElementById('contactForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const msg = document.getElementById('contactMsg');
+      msg.textContent = '✓ Message sent successfully. We read every word.';
+      e.target.reset();
+      setTimeout(() => msg.textContent = '', 6000);
+    });
+
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+    });
+
+    function observeReveals() {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            en.target.classList.add('visible');
+            io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el));
+    }
+    observeReveals();
+  </script>
+</body>
+</html>
