@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Paradise - Tourism Website</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#f5f7fa;
+      color:#222;
+    }
+
+    header{
+      width:100%;
+      background:rgba(0,0,0,0.7);
+      position:fixed;
+      top:0;
+      left:0;
+      z-index:1000;
+      padding:18px 8%;
+    }
+
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    nav h1{
+      color:white;
+      font-size:2rem;
+      font-weight:700;
+    }
+
+    nav ul{
+      display:flex;
+      gap:25px;
+      list-style:none;
+    }
+
+    nav ul li a{
+      text-decoration:none;
+      color:white;
+      font-weight:500;
+      transition:0.3s;
+    }
+
+    nav ul li a:hover{
+      color:#facc15;
+    }
+
+    .hero{
+      height:100vh;
+      background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:white;
+      position:relative;
+    }
+
+    .hero::before{
+      content:'';
+      position:absolute;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.55);
+      top:0;
+      left:0;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:1;
+      max-width:800px;
+      padding:20px;
+    }
+
+    .hero-content h2{
+      font-size:4rem;
+      margin-bottom:20px;
+    }
+
+    .hero-content p{
+      font-size:1.2rem;
+      margin-bottom:30px;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:14px 32px;
+      background:#2563eb;
+      color:white;
+      text-decoration:none;
+      border-radius:30px;
+      font-weight:600;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+      background:#1d4ed8;
+      transform:translateY(-3px);
+    }
+
+    section{
+      padding:90px 8%;
+    }
+
+    .section-title{
+      text-align:center;
+      font-size:2.7rem;
+      color:#1e3a8a;
+      margin-bottom:60px;
+      position:relative;
+    }
+
+    .section-title::after{
+      content:'';
+      position:absolute;
+      width:100px;
+      height:4px;
+      background:#2563eb;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:-10px;
+      border-radius:10px;
+    }
+
+    .places{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:30px;
+    }
+
+    .card{
+      background:white;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 8px 20px rgba(0,0,0,0.12);
+      transition:0.4s;
+    }
+
+    .card:hover{
+      transform:translateY(-10px);
+    }
+
+    .card img{
+      width:100%;
+      height:250px;
+      object-fit:cover;
+    }
+
+    .card-content{
+      padding:25px;
+    }
+
+    .card-content h3{
+      color:#1e3a8a;
+      margin-bottom:15px;
+      font-size:1.5rem;
+    }
+
+    .card-content p{
+      color:#555;
+      margin-bottom:20px;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+    }
+
+    .gallery img{
+      width:100%;
+      height:280px;
+      object-fit:cover;
+      border-radius:18px;
+      transition:0.4s;
+      box-shadow:0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    .gallery img:hover{
+      transform:scale(1.05);
+    }
+
+    .contact-container{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:40px;
+      align-items:center;
+    }
+
+    .contact-info{
+      background:white;
+      padding:35px;
+      border-radius:20px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .contact-info h3{
+      color:#1e3a8a;
+      margin-bottom:20px;
+      font-size:2rem;
+    }
+
+    .contact-info p{
+      margin-bottom:15px;
+      color:#444;
+      font-size:1.05rem;
+    }
+
+    form{
+      background:white;
+      padding:35px;
+      border-radius:20px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    form input,
+    form textarea{
+      width:100%;
+      padding:15px;
+      margin-bottom:20px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      font-family:'Poppins',sans-serif;
+      font-size:1rem;
+    }
+
+    form button{
+      border:none;
+      cursor:pointer;
+    }
+
+    footer{
+      background:#0f172a;
+      color:white;
+      text-align:center;
+      padding:30px;
+    }
+
+    @media(max-width:900px){
+      .hero-content h2{
+        font-size:2.8rem;
+      }
+
+      nav{
+        flex-direction:column;
+        gap:15px;
+      }
+
+      nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <h1>Explore Paradise</h1>
+
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#places">Places</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h2>Discover Amazing Destinations</h2>
+      <p>
+        Explore the world's most beautiful tourist places, beaches, mountains,
+        waterfalls, temples, and cultural landmarks.
+      </p>
+
+      <a href="#places" class="btn">Explore Now</a>
+    </div>
+  </section>
+
+  <section id="places">
+    <h2 class="section-title">Top Tourist Places</h2>
+
+    <div class="places">
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop" alt="Mountains">
+
+        <div class="card-content">
+          <h3>Swiss Alps</h3>
+          <p>
+            Experience breathtaking mountain views, snowy peaks, and adventurous hiking trails.
+          </p>
+          <a href="#contact" class="btn">Book Tour</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" alt="Beach">
+
+        <div class="card-content">
+          <h3>Maldives Beach</h3>
+          <p>
+            Relax on crystal-clear beaches with luxurious resorts and stunning sunsets.
+          </p>
+          <a href="#contact" class="btn">Book Tour</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=1200&auto=format&fit=crop" alt="Temple">
+
+        <div class="card-content">
+          <h3>Taj Mahal</h3>
+          <p>
+            Visit India's iconic symbol of love and admire its magnificent Mughal architecture.
+          </p>
+          <a href="#contact" class="btn">Book Tour</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1200&auto=format&fit=crop" alt="Waterfall">
+
+        <div class="card-content">
+          <h3>Niagara Falls</h3>
+          <p>
+            Witness the power and beauty of one of the world's most famous waterfalls.
+          </p>
+          <a href="#contact" class="btn">Book Tour</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1200&auto=format&fit=crop" alt="Paris">
+
+        <div class="card-content">
+          <h3>Paris</h3>
+          <p>
+            Explore the romantic city filled with art, culture, fashion, and the Eiffel Tower.
+          </p>
+          <a href="#contact" class="btn">Book Tour</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="file:///C:/Users/RK/Downloads/AM" alt="Forest">
+
+        <div class="card-content">
+          <h3>Amazon Forest</h3>
+          <p>
+            Discover nature, wildlife, and adventure in the world's largest rainforest.
+          </p>
+          <a href="#contact" class="btn">Book Tour</a>
+        </div>
+      </div>
+
+    </div>
+  </

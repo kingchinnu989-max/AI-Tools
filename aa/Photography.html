@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMINA — Photography Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07070a; --surface:#0e0e13; --gold:#c9a84c; --gold2:#e8c97a;
+  --white:#f3ede3; --muted:#58545e; --red:#7b1d2e;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:'Raleway',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9990;opacity:.5}
+
+/* Cursor */
+.cur,.curR{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+.cur{width:8px;height:8px;background:var(--gold);transition:width .25s,height .25s,background .25s}
+.curR{width:38px;height:38px;border:1px solid rgba(201,168,76,.4);z-index:9998;transition:width .3s,height .3s,opacity .3s}
+.cur.h{width:5px;height:5px;background:#fff}.curR.h{width:56px;height:56px;opacity:.28}
+
+/* Loader */
+#loader{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:8500;transition:opacity .9s,visibility .9s}
+#loader.done{opacity:0;visibility:hidden}
+.ldw{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,10vw,7rem);font-weight:300;letter-spacing:.38em;color:var(--gold);clip-path:inset(0 100% 0 0);animation:ldRev 1.3s cubic-bezier(.77,0,.175,1) .3s forwards}
+.ldb{width:0;height:1px;background:var(--gold);margin-top:.85rem;animation:ldBar 1s ease .85s forwards}
+@keyframes ldRev{to{clip-path:inset(0 0% 0 0)}}
+@keyframes ldBar{to{width:150px}}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;padding:1.8rem 4rem;display:flex;justify-content:space-between;align-items:center;z-index:200;background:linear-gradient(to bottom,rgba(7,7,10,.9),transparent);backdrop-filter:blur(3px)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;letter-spacing:.28em;color:var(--gold);text-decoration:none}
+.navl{display:flex;gap:2.8rem;list-style:none}
+.navl a{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;position:relative}
+.navl a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .4s}
+.navl a:hover{color:var(--gold)}.navl a:hover::after{width:100%}
+
+/* Hero */
+#hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:0 4rem 7rem}
+.reel{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
+.rcol{display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.rcol:nth-child(2){margin-top:-55px}.rcol:nth-child(3){margin-top:45px}
+.rcol img{width:100%;object-fit:cover;flex:1 1 0;min-height:180px;filter:brightness(.3) saturate(.75);animation:panY 20s linear infinite alternate}
+@keyframes panY{0%{transform:translateY(0)}100%{transform:translateY(-5%)}}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse 75% 90% at 0% 100%,rgba(7,7,10,.97) 0%,transparent 55%),linear-gradient(to right,rgba(7,7,10,.9) 0%,transparent 58%)}
+.hc{position:relative;z-index:2}
+.hey{font-size:.57rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;opacity:0;transform:translateY(16px);animation:up .8s ease 2s forwards}
+.ht{font-family:'Cormorant Garamond',serif;font-size:clamp(3.8rem,9vw,8.5rem);font-weight:300;line-height:.9;opacity:0;transform:translateY(36px);animation:up 1s ease 2.2s forwards}
+.ht em{font-style:italic;color:var(--gold)}
+.hs{font-size:.7rem;letter-spacing:.11em;color:var(--muted);line-height:2.1;max-width:300px;margin-top:1.8rem;opacity:0;transform:translateY(16px);animation:up .8s ease 2.5s forwards}
+.hcta{display:inline-block;margin-top:2.4rem;padding:.72rem 2.1rem;border:1px solid rgba(201,168,76,.38);color:var(--gold);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;position:relative;overflow:hidden;opacity:0;animation:up .8s ease 2.8s forwards;transition:color .4s}
+.hcta::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.77,0,.175,1);z-index:-1}
+.hcta:hover{color:#000}.hcta:hover::before{transform:scaleX(1)}
+.hscr{position:absolute;right:4rem;bottom:6rem;display:flex;flex-direction:column;align-items:center;gap:.9rem;opacity:0;animation:fi 1s ease 3s forwards}
+.hscr span{font-size:.5rem;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-lr}
+.sline{width:1px;height:72px;background:linear-gradient(to bottom,var(--gold),transparent);animation:pulse 2.2s ease-in-out infinite 3.2s}
+@keyframes pulse{0%,100%{transform:scaleY(1);opacity:.5}50%{transform:scaleY(.5);opacity:1}}
+@keyframes up{to{opacity:1;transform:translateY(0)}}
+@keyframes fi{to{opacity:1}}
+
+/* Section */
+section{padding:8rem 4rem}
+.shd{display:flex;align-items:baseline;gap:1.8rem;margin-bottom:4.5rem}
+.snum{font-family:'Cormorant Garamond',serif;font-size:.85rem;color:var(--gold);letter-spacing:.2em}
+.stit{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.4rem);font-weight:300;letter-spacing:.08em}
+.srule{flex:1;height:1px;background:linear-gradient(to right,var(--muted),transparent);opacity:.22}
+
+/* Filters */
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:3.5rem}
+.fb{padding:.45rem 1.4rem;background:transparent;border:1px solid rgba(201,168,76,.16);color:var(--muted);font-family:'Raleway',sans-serif;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;cursor:none;transition:all .4s;position:relative;overflow:hidden}
+.fb::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.77,0,.175,1);z-index:-1}
+.fb:hover,.fb.on{color:#000;border-color:var(--gold)}.fb:hover::before,.fb.on::before{transform:scaleX(1)}
+
+/* Masonry */
+.masonry{columns:3;column-gap:1rem}
+@media(max-width:1100px){.masonry{columns:2}}
+@media(max-width:600px){.masonry{columns:1}}
+.mi{break-inside:avoid;margin-bottom:1rem;position:relative;overflow:hidden;cursor:none;opacity:0;transform:translateY(28px);animation:revI .65s cubic-bezier(.33,1,.68,1) forwards;animation-play-state:paused}
+@keyframes revI{to{opacity:1;transform:translateY(0)}}
+.mi.hide{display:none}
+.mi img.ph{display:block;width:100%;height:auto;transition:transform .8s cubic-bezier(.33,1,.68,1),filter .8s ease}
+
+/* Portrait — Film Burn */
+.tp img.ph{filter:contrast(1.06) brightness(.95)}
+.tp:hover img.ph{transform:scale(1.06);filter:contrast(1.25) brightness(.7) sepia(.38) saturate(1.2)}
+.tp .ov{position:absolute;inset:0;background:radial-gradient(ellipse at 15% 10%,rgba(201,168,76,.42) 0%,transparent 52%),radial-gradient(ellipse at 88% 88%,rgba(123,29,46,.58) 0%,transparent 50%),linear-gradient(160deg,transparent 35%,rgba(0,0,0,.82) 100%);opacity:0;transition:opacity .6s}
+.tp:hover .ov{opacity:1}
+
+/* Landscape — Anamorphic */
+.tl img.ph{filter:contrast(1.08) brightness(.92)}
+.tl:hover img.ph{transform:scale(1.07) scaleX(1.025);filter:brightness(.68) saturate(1.38) contrast(1.15)}
+.tl .ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.84) 0%,transparent 55%);opacity:0;transition:opacity .6s}
+.tl:hover .ov{opacity:1}
+.tl::after{content:'';position:absolute;top:50%;left:-20%;width:140%;height:2px;background:linear-gradient(to right,transparent,rgba(201,168,76,.85),rgba(255,255,255,.65),rgba(201,168,76,.85),transparent);transform:translateY(-50%);opacity:0;transition:opacity .4s ease .2s;pointer-events:none;filter:blur(1.5px)}
+.tl:hover::after{opacity:1}
+
+/* Street — Noir */
+.ts img.ph{filter:contrast(1.12) brightness(.9)}
+.ts:hover img.ph{transform:scale(1.05);filter:grayscale(1) contrast(1.55) brightness(.62)}
+.ts .ov{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.05) 2px,rgba(0,0,0,.05) 4px);opacity:0;transition:opacity .5s}
+.ts:hover .ov{opacity:1}
+
+/* Nature — Dreamy Bloom */
+.tn img.ph{filter:saturate(1.1) brightness(.94)}
+.tn:hover img.ph{transform:scale(1.07);filter:saturate(1.55) brightness(1.07) blur(.4px)}
+.tn .ov{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(201,168,76,.1) 0%,rgba(0,40,20,.48) 100%);opacity:0;transition:opacity .9s}
+.tn:hover .ov{opacity:1}
+
+/* Architecture — Blueprint */
+.ta img.ph{filter:contrast(1.1) brightness(.92)}
+.ta:hover img.ph{transform:scale(1.05) rotate(.4deg);filter:contrast(1.38) brightness(.58) hue-rotate(14deg) saturate(1.2)}
+.ta .ov{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.07) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,10,30,.22),rgba(0,20,62,.68));background-size:28px 28px,28px 28px,100% 100%;opacity:0;transition:opacity .5s}
+.ta:hover .ov{opacity:1}
+
+/* Abstract — Chromatic Aberration */
+.tab img.ph{filter:saturate(1.2) contrast(1.05)}
+.tab:hover img.ph{transform:scale(1.06);filter:saturate(2.1) contrast(1.32) brightness(.72) hue-rotate(28deg)}
+.tab .ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(123,29,46,.42) 0%,rgba(0,0,90,.52) 100%);opacity:0;transition:opacity .6s;mix-blend-mode:multiply}
+.tab:hover .ov{opacity:1}
+
+/* Common info */
+.ov{pointer-events:none}
+.info{position:absolute;bottom:0;left:0;right:0;padding:2.2rem 1.4rem 1.4rem;background:linear-gradient(to top,rgba(0,0,0,.92),transparent);transform:translateY(100%);transition:transform .52s cubic-bezier(.33,1,.68,1);z-index:5}
+.mi:hover .info{transform:translateY(0)}
+.info h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;letter-spacing:.06em;margin-bottom:.25rem}
+.info p{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.tag{position:absolute;top:.9rem;right:.9rem;background:rgba(0,0,0,.72);border:1px solid rgba(201,168,76,.28);color:var(--gold);font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;padding:.22rem .55rem;backdrop-filter:blur(4px);opacity:0;transform:translateY(-5px);transition:all .4s ease .1s;z-index:6}
+.mi:hover .tag{opacity:1;transform:translateY(0)}
+
+/* Lightbox */
+#lb{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:7000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s,background .5s}
+#lb.open{opacity:1;visibility:visible;background:rgba(0,0,0,.96)}
+.lbw{position:relative;max-width:90vw;max-height:88vh;transform:scale(.93) translateY(18px);transition:transform .5s cubic-bezier(.33,1,.68,1)}
+#lb.open .lbw{transform:scale(1) translateY(0)}
+#lbImg{display:block;max-width:90vw;max-height:80vh;object-fit:contain;box-shadow:0 30px 100px rgba(0,0,0,.88)}
+.lbm{position:absolute;bottom:-3.6rem;left:0;right:0;display:flex;justify-content:space-between;align-items:center}
+#lbT{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;letter-spacing:.07em}
+#lbC{font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.lbcl{position:absolute;top:-3rem;right:0;background:none;border:1px solid rgba(201,168,76,.26);color:var(--muted);font-family:'Raleway',sans-serif;font-size:.52rem;letter-spacing:.24em;text-transform:uppercase;padding:.45rem .9rem;cursor:none;transition:all .3s}
+.lbcl:hover{color:var(--white);border-color:var(--gold)}
+.lbnav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.2);color:var(--muted);font-size:1.3rem;width:3rem;height:3rem;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .3s;backdrop-filter:blur(4px)}
+.lbnav:hover{color:var(--gold);border-color:var(--gold)}
+.lbp{left:-4.5rem}.lbnx{right:-4.5rem}
+
+/* About */
+#about{background:var(--surface);display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+@media(max-width:800px){#about{grid-template-columns:1fr}}
+.ap{position:relative;aspect-ratio:2/3;overflow:hidden}
+.ap img{width:100%;height:100%;object-fit:cover;filter:sepia(.18) contrast(1.1);transition:transform 1.1s ease}
+.ap:hover img{transform:scale(1.04)}
+.ap::before{content:'';position:absolute;inset:14px;border:1px solid rgba(201,168,76,.17);z-index:2;pointer-events:none}
+.ap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:38%;background:linear-gradient(to top,rgba(7,7,10,.8),transparent);z-index:2}
+.at p{font-size:.78rem;line-height:2.3;color:rgba(243,237,227,.62);margin-bottom:1.4rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;margin-top:2.8rem;padding-top:2rem;border-top:1px solid rgba(201,168,76,.11)}
+.sn2{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--gold);display:block;line-height:1}
+.sl2{font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.35rem}
+
+/* Contact */
+#contact{text-align:center;position:relative;overflow:hidden;background:linear-gradient(to bottom,var(--bg),#090608)}
+#contact::before{content:'CONTACT';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:clamp(5rem,18vw,16rem);font-weight:300;color:rgba(201,168,76,.025);white-space:nowrap;pointer-events:none;letter-spacing:.3em}
+.csub{font-size:.62rem;letter-spacing:.22em;color:var(--muted);margin-bottom:1.2rem}
+.ctit{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;letter-spacing:.1em;margin-bottom:3rem}
+.cmail{display:inline-block;font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3.5vw,2.6rem);font-weight:300;letter-spacing:.05em;color:var(--gold);text-decoration:none;position:relative}
+.cmail::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .5s cubic-bezier(.77,0,.175,1)}
+.cmail:hover::after{transform:scaleX(1)}
+.socials{display:flex;justify-content:center;gap:2.5rem;margin-top:3.5rem}
+.socials a{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s}
+.socials a:hover{color:var(--gold)}
+
+footer{padding:1.8rem 4rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(201,168,76,.07)}
+footer p{font-size:.52rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+
+.rev{opacity:0;transform:translateY(36px);transition:opacity .85s ease,transform .85s cubic-bezier(.33,1,.68,1)}
+.rev.vis{opacity:1;transform:translateY(0)}
+
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold)}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="ldw">LUMINA</div><div class="ldb"></div></div>
+<div class="cur" id="cur"></div>
+<div class="curR" id="curR"></div>
+
+<nav>
+  <a href="#" class="logo">LUMINA</a>
+  <ul class="navl">
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="reel">
+    <div class="rcol">
+      <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=85" alt="">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=85" alt="">
+      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700&q=85" alt="">
+    </div>
+    <div class="rcol">
+      <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=700&q=85" alt="">
+      <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=85" alt="">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=85" alt="">
+    </div>
+    <div class="rcol">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=85" alt="">
+      <img src="https://images.unsplash.com/photo-1519519031381-a80e4f04ba70?w=700&q=85" alt="">
+      <img src="https://images.unsplash.com/photo-1493397212122-2b85dda8106b?w=700&q=85" alt="">
+    </div>
+  </div>
+  <div class="vig"></div>
+  <div class="hc">
+    <div class="hey">Visual Storytelling &nbsp;·&nbsp; Est. 2018</div>
+    <h1 class="ht">Light <em>finds</em><br>its truth.</h1>
+    <p class="hs">Every frame a moment suspended — where emotion, texture and time collide into something permanent.</p>
+    <a href="#gallery" class="hcta">View the Work</a>
+  </div>
+  <div class="hscr"><div class="sline"></div><span>Scroll</span></div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="shd rev"><span class="snum">01 /</span><h2 class="stit">Selected Works</h2><div class="srule"></div></div>
+  <div class="filters rev">
+    <button class="fb on" data-f="all">All</button>
+    <button class="fb" data-f="portrait">Portrait</button>
+    <button class="fb" data-f="landscape">Landscape</button>
+    <button class="fb" data-f="street">Street</button>
+    <button class="fb" data-f="nature">Nature</button>
+    <button class="fb" data-f="architecture">Architecture</button>
+    <button class="fb" data-f="abstract">Abstract</button>
+  </div>
+
+  <div class="masonry" id="masonry">
+
+    <!-- PORTRAITS — Film Burn hover -->
+    <div class="mi tp" data-c="portrait">
+      <img class="ph" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=85" alt="Silent Reverie">
+      <div class="ov"></div><span class="tag">Portrait</span>
+      <div class="info"><h3>Silent Reverie</h3><p>Natural Light · 2024</p></div>
+    </div>
+
+    <!-- LANDSCAPE — Anamorphic hover -->
+    <div class="mi tl" data-c="landscape">
+      <img class="ph" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=85" alt="Alpine Solitude">
+      <div class="ov"></div><span class="tag">Landscape</span>
+      <div class="info"><h3>Alpine Solitude</h3><p>Golden Hour · 2024</p></div>
+    </div>
+
+    <!-- STREET — Noir hover -->
+    <div class="mi ts" data-c="street">
+      <img class="ph" src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700&q=85" alt="City Pulse">
+      <div class="ov"></div><span class="tag">Street</span>
+      <div class="info"><h3>City Pulse</h3><p>Urban · 2023</p></div>
+    </div>
+
+    <!-- NATURE — Dreamy Bloom hover -->
+    <div class="mi tn" data-c="nature">
+      <img class="ph" src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=700&q=85" alt="Ancient Canopy">
+      <div class="ov"></div><span class="tag">Nature</span>
+      <div class="info"><h3>Ancient Canopy</h3><p>Forest · 2024</p></div>
+    </div>
+
+    <!-- ARCHITECTURE — Blueprint hover -->
+    <div class="mi ta" data-c="architecture">
+      <img class="ph" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=85" alt="Glass Symmetry">
+      <div class="ov"></div><span class="tag">Architecture</span>
+      <div class="info"><h3>Glass Symmetry</h3><p>Modern · 2023</p></div>
+    </div>
+
+    <!-- PORTRAIT -->
+    <div class="mi tp" data-c="portrait">
+      <img class="ph" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700&q=85" alt="Golden Veil">
+      <div class="ov"></div><span class="tag">Portrait</span>
+      <div class="info"><h3>Golden Veil</h3><p>Editorial · 2024</p></div>
+    </div>
+
+    <!-- ABSTRACT — Chromatic hover -->
+    <div class="mi tab" data-c="abstract">
+      <img class="ph" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=700&q=85" alt="Chromatic Drift">
+      <div class="ov"></div><span class="tag">Abstract</span>
+      <div class="info"><h3>Chromatic Drift</h3><p>Macro · 2024</p></div>
+    </div>
+
+    <!-- LANDSCAPE -->
+    <div class="mi tl" data-c="landscape">
+      <img class="ph" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=85" alt="Peak Silence">
+      <div class="ov"></div><span class="tag">Landscape</span>
+      <div class="info"><h3>Peak Silence</h3><p>Mountain · 2022</p></div>
+    </div>
+
+    <!-- STREET -->
+    <div class="mi ts" data-c="street">
+      <img class="ph" src="https://images.unsplash.com/photo-1519519031381-a80e4f04ba70?w=700&q=85" alt="Rain & Neon">
+      <div class="ov"></div><span class="tag">Street</span>
+      <div class="info"><h3>Rain &amp; Neon</h3><p>Night · 2023</p></div>
+    </div>
+
+    <!-- NATURE -->
+    <div class="mi tn" data-c="nature">
+      <img class="ph" src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=700&q=85" alt="Still Waters">
+      <div class="ov"></div><span class="tag">Nature</span>
+      <div class="info"><h3>Still Waters</h3><p>Lake · 2024</p></div>
+    </div>
+
+    <!-- PORTRAIT -->
+    <div class="mi tp" data-c="portrait">
+      <img class="ph" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=700&q=85" alt="Dusk Bloom">
+      <div class="ov"></div><span class="tag">Portrait</span>
+      <div class="info"><h3>Dusk Bloom</h3><p>Outdoor · 2023</p></div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="mi ta" data-c="architecture">
+      <img class="ph" src="https://images.unsplash.com/photo-1493397212122-2b85dda8106b?w=700&q=85" alt="Infinite Arches">
+      <div class="ov"></div><span class="tag">Architecture</span>
+      <div class="info"><h3>Infinite Arches</h3><p>Geometric · 2024</p></div>
+    </div>
+
+    <!-- ABSTRACT -->
+    <div class="mi tab" data-c="abstract">
+      <img class="ph" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=85" alt="Liquid Light">
+      <div class="ov"></div><span class="tag">Abstract</span>
+      <div class="info"><h3>Liquid Light</h3><p>Long Exposure · 2023</p></div>
+    </div>
+
+    <!-- LANDSCAPE -->
+    <div class="mi tl" data-c="landscape">
+      <img class="ph" src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=700&q=85" alt="Painted Sky">
+      <div class="ov"></div><span class="tag">Landscape</span>
+      <div class="info"><h3>Painted Sky</h3><p>Sunset · 2023</p></div>
+    </div>
+
+    <!-- STREET -->
+    <div class="mi ts" data-c="street">
+      <img class="ph" src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=700&q=85" alt="Crossroads">
+      <div class="ov"></div><span class="tag">Street</span>
+      <div class="info"><h3>Crossroads</h3><p>Documentary · 2024</p></div>
+    </div>
+
+    <!-- NATURE -->
+    <div class="mi tn" data-c="nature">
+      <img class="ph" src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=700&q=85" alt="Morning Mist">
+      <div class="ov"></div><span class="tag">Nature</span>
+      <div class="info"><h3>Morning Mist</h3><p>Forest · 2024</p></div>
+    </div>
+
+    <!-- PORTRAIT -->
+    <div class="mi tp" data-c="portrait">
+      <img class="ph" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=85" alt="The Gaze">
+      <div class="ov"></div><span class="tag">Portrait</span>
+      <div class="info"><h3>The Gaze</h3><p>Studio · 2024</p></div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="mi ta" data-c="architecture">
+      <img class="ph" src="https://images.unsplash.com/photo-1431576901776-e539bd916ba2?w=700&q=85" alt="Linear Grace">
+      <div class="ov"></div><span class="tag">Architecture</span>
+      <div class="info"><h3>Linear Grace</h3><p>Minimalist · 2024</p></div>
+    </div>
+
+    <!-- ABSTRACT -->
+    <div class="mi tab" data-c="abstract">
+      <img class="ph" src="https://images.unsplash.com/photo-1507908708918-778587c9e563?w=700&q=85" alt="Fracture">
+      <div class="ov"></div><span class="tag">Abstract</span>
+      <div class="info"><h3>Fracture</h3><p>Experimental · 2023</p></div>
+    </div>
+
+    <!-- LANDSCAPE -->
+    <div class="mi tl" data-c="landscape">
+      <img class="ph" src="https://images.unsplash.com/photo-1439853949212-36089d7e7e78?w=700&q=85" alt="Desert Bloom">
+      <div class="ov"></div><span class="tag">Landscape</span>
+      <div class="info"><h3>Desert Bloom</h3><p>Aerial · 2023</p></div>
+    </div>
+
+    <!-- STREET -->
+    <div class="mi ts" data-c="street">
+      <img class="ph" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=700&q=85" alt="Lost Hours">
+      <div class="ov"></div><span class="tag">Street</span>
+      <div class="info"><h3>Lost Hours</h3><p>Asia · 2023</p></div>
+    </div>
+
+    <!-- PORTRAIT -->
+    <div class="mi tp" data-c="portrait">
+      <img class="ph" src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=700&q=85" alt="Ember">
+      <div class="ov"></div><span class="tag">Portrait</span>
+      <div class="info"><h3>Ember</h3><p>Backlit · 2024</p></div>
+    </div>
+
+    <!-- NATURE -->
+    <div class="mi tn" data-c="nature">
+      <img class="ph" src="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=700&q=85" alt="Wild Edge">
+      <div class="ov"></div><span class="tag">Nature</span>
+      <div class="info"><h3>Wild Edge</h3><p>Coastal · 2023</p></div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="mi ta" data-c="architecture">
+      <img class="ph" src="https://images.unsplash.com/photo-1505409859467-3a796fd5798e?w=700&q=85" alt="Steel Cathedral">
+      <div class="ov"></div><span class="tag">Architecture</span>
+      <div class="info"><h3>Steel Cathedral</h3><p>Interior · 2023</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="ap rev">
+    <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=900&q=85" alt="Photographer at work">
+  </div>
+  <div class="at">
+    <div class="shd rev" style="margin-bottom:1.8rem">
+      <span class="snum">02 /</span>
+      <h2 class="stit">The Eye<br>Behind</h2>
+    </div>
+    <p class="rev">I am a visual storyteller drawn to the poetry hidden inside ordinary moments — the way afternoon light fractures through glass, how shadows define architecture, the weight of silence in a crowded street.</p>
+    <p class="rev">Every photograph is a negotiation between what I see and what I feel. My work spans editorial portraiture, documentary street photography, and cinematic landscape — united by an obsession with mood, texture, and time.</p>
+    <p class="rev">Based in New Delhi. Available worldwide for editorial, commercial, and personal projects.</p>
+    <div class="stats rev">
+      <div><span class="sn2">12+</span><span class="sl2">Years Active</span></div>
+      <div><span class="sn2">3.4K</span><span class="sl2">Shoots Done</span></div>
+      <div><span class="sn2">48</span><span class="sl2">Awards Won</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="rev">
+    <p class="csub">Available for commissions &amp; collaborations</p>
+    <h2 class="ctit">Let's create<br>something timeless.</h2>
+    <a href="mailto:hello@lumina.photo" class="cmail">hello@lumina.photo</a>
+    <div class="socials">
+      <a href="#">Instagram</a>
+      <a href="#">Behance</a>
+      <a href="#">VSCO</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2024 Lumina Photography. All rights reserved.</p>
+  <p>Crafted with obsession</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lb">
+  <div class="lbw">
+    <button class="lbcl" id="lbX">✕ Close</button>
+    <button class="lbnav lbp" id="lbP">‹</button>
+    <button class="lbnav lbnx" id="lbN">›</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lbm">
+      <div><div id="lbT"></div><div id="lbC"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Loader */
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('done'),2200));
+
+/* Cursor */
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function t(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(t)})();
+document.querySelectorAll('a,button,.mi,.fb').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('h');curR.classList.add('h')});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('h');curR.classList.remove('h')});
+});
+
+/* Scroll reveal */
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.rev').forEach(r=>obs.observe(r));
+
+/* Masonry stagger */
+const mItems=[...document.querySelectorAll('.mi')];
+const mObs=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting){
+    e.target.style.animationDelay=(parseFloat(e.target.dataset.d||0)*0.07)+'s';
+    e.target.style.animationPlayState='running';
+    mObs.unobserve(e.target);
+  }
+}),{threshold:.04});
+mItems.forEach((m,i)=>{m.dataset.d=i%8;m.style.animationPlayState='paused';mObs.observe(m)});
+
+/* Filter */
+document.querySelectorAll('.fb').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const f=btn.dataset.f;
+    let d=0;
+    mItems.forEach(m=>{
+      if(f==='all'||m.dataset.c===f){
+        m.classList.remove('hide');
+        m.style.animationDelay=(d*0.055)+'s';
+        m.style.animation='none';
+        requestAnimationFrame(()=>{m.style.animation='';m.style.animationPlayState='running'});
+        d++;
+      } else {
+        m.classList.add('hide');
+      }
+    });
+  });
+});
+
+/* Lightbox */
+const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbT=document.getElementById('lbT'),lbC=document.getElementById('lbC');
+let idx=0,vis=[];
+const getVis=()=>[...document.querySelectorAll('.mi:not(.hide)')];
+
+mItems.forEach(m=>m.addEventListener('click',()=>{vis=getVis();idx=vis.indexOf(m);openLB(idx)}));
+
+function openLB(i){
+  const m=vis[i];
+  const src=m.querySelector('.ph').src.replace('w=700','w=1400');
+  lbImg.style.opacity='0';lbImg.style.transform='scale(.96)';
+  lbImg.src=src;
+  lbImg.onload=()=>{lbImg.style.transition='opacity .4s,transform .4s';lbImg.style.opacity='1';lbImg.style.transform='scale(1)'};
+  lbT.textContent=m.querySelector('.info h3')?.textContent||'';
+  lbC.textContent=m.querySelector('.tag')?.textContent||'';
+  lb.classList.add('open');document.body.style.overflow='hidden';
+}
+function closeLB(){lb.classList.remove('open');document.body.style.overflow=''}
+
+document.getElementById('lbX').addEventListener('click',closeLB);
+lb.addEventListener('click',e=>{if(e.target===lb)closeLB()});
+document.getElementById('lbP').addEventListener('click',()=>{vis=getVis();idx=(idx-1+vis.length)%vis.length;openLB(idx)});
+document.getElementById('lbN').addEventListener('click',()=>{vis=getVis();idx=(idx+1)%vis.length;openLB(idx)});
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')closeLB();
+  if(e.key==='ArrowLeft')document.getElementById('lbP').click();
+  if(e.key==='ArrowRight')document.getElementById('lbN').click();
+});
+</script>
+</body>
+</html>

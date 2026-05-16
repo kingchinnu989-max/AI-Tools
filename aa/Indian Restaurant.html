@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RANGOLI — Authentic Indian Cuisine</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Raleway:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --saffron:#E8861A; --turmeric:#F5C542; --crimson:#9B1D20;
+  --cardamom:#2D4A3E; --cream:#FDF6EC; --parchment:#F5ECD8;
+  --warm-white:#FEFAF3; --ink:#1C1208; --brown:#6B3F1A;
+  --brown-l:#9B6038; --gold:#C9972A; --gold-l:#E2B84A;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Raleway',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+#cur{width:12px;height:12px;border-radius:50%;background:var(--saffron);position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#cur-ring{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--saffron);position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.4rem 4rem;background:rgba(28,18,8,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(232,134,26,.2);transition:padding .4s;}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--turmeric);letter-spacing:.08em;text-decoration:none;}
+.nav-logo span{color:var(--saffron);}
+.nav-links{display:flex;gap:2.2rem;list-style:none;}
+.nav-links a{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(253,246,236,.7);text-decoration:none;transition:color .3s;}
+.nav-links a:hover{color:var(--turmeric);}
+.nav-res{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;padding:.6rem 1.6rem;border:1px solid var(--saffron);color:var(--saffron);text-decoration:none;transition:all .3s;}
+.nav-res:hover{background:var(--saffron);color:var(--ink);}
+
+/* HERO */
+#hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=1600&q=85') center/cover no-repeat;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(110deg,rgba(28,18,8,.93) 48%,rgba(28,18,8,.3) 100%);}
+.hero-deco{position:absolute;right:9%;top:50%;transform:translateY(-50%);width:360px;height:360px;border-radius:50%;border:1px solid rgba(232,134,26,.22);}
+.hero-deco::before{content:'';position:absolute;inset:20px;border-radius:50%;border:1px solid rgba(245,197,66,.18);}
+.hero-deco::after{content:'';position:absolute;inset:40px;border-radius:50%;border:1px dashed rgba(232,134,26,.12);}
+.hero-content{position:relative;z-index:2;padding:0 5rem;max-width:680px;}
+.hero-tag{font-size:.62rem;letter-spacing:.35em;text-transform:uppercase;color:var(--turmeric);margin-bottom:1.2rem;opacity:0;animation:fadeUp .8s .2s forwards;}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(3.2rem,6vw,5.8rem);font-weight:700;line-height:1.05;color:var(--warm-white);margin-bottom:1rem;opacity:0;animation:fadeUp .9s .35s forwards;}
+.hero-h1 em{color:var(--turmeric);font-style:italic;}
+.hero-sub{font-size:.88rem;line-height:1.95;color:rgba(253,246,236,.72);font-weight:300;max-width:480px;margin-bottom:2.5rem;opacity:0;animation:fadeUp .9s .5s forwards;}
+.hero-btns{display:flex;gap:1rem;opacity:0;animation:fadeUp .9s .65s forwards;}
+.btn-saffron{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;padding:1rem 2.4rem;background:var(--saffron);color:var(--ink);text-decoration:none;font-weight:600;transition:background .3s;}
+.btn-saffron:hover{background:var(--turmeric);}
+.btn-ghost{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;padding:1rem 2.4rem;border:1px solid rgba(253,246,236,.4);color:var(--warm-white);text-decoration:none;transition:all .3s;}
+.btn-ghost:hover{border-color:var(--turmeric);color:var(--turmeric);}
+
+/* SPICE STRIP */
+.spice-bar{background:var(--saffron);padding:.75rem 0;overflow:hidden;white-space:nowrap;}
+.spice-inner{display:inline-block;animation:marquee 28s linear infinite;}
+.spice-inner span{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink);padding:0 2.5rem;font-weight:600;}
+.spice-inner span::after{content:'✦';margin-left:2.5rem;opacity:.4;}
+
+/* SECTION COMMONS */
+section{padding:6rem 5rem;}
+.s-label{font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--saffron);margin-bottom:.7rem;font-weight:500;}
+.s-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:700;color:var(--ink);line-height:1.2;}
+.s-title em{font-style:italic;color:var(--crimson);}
+
+/* ABOUT */
+#about{background:var(--ink);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.about-img-wrap{position:relative;}
+.about-img-wrap img{width:100%;aspect-ratio:4/5;object-fit:cover;filter:sepia(.1) brightness(.9);}
+.about-corner-tl{position:absolute;top:-1.2rem;left:-1.2rem;width:100px;height:100px;border-top:2px solid var(--saffron);border-left:2px solid var(--saffron);}
+.about-corner-br{position:absolute;bottom:-1.2rem;right:-1.2rem;width:100px;height:100px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);}
+.about-content .s-label{color:var(--turmeric);}
+.about-content .s-title{color:var(--warm-white);}
+.about-content .s-title em{color:var(--turmeric);}
+.about-text{font-size:.85rem;line-height:1.95;color:rgba(253,246,236,.65);font-weight:300;margin-top:1.4rem;}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2.5rem;}
+.stat{text-align:center;padding:1.4rem .8rem;border:1px solid rgba(232,134,26,.2);}
+.stat-n{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--turmeric);}
+.stat-l{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(253,246,236,.45);margin-top:.3rem;}
+
+/* MENU */
+#menu{background:var(--parchment);}
+.menu-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;}
+.menu-tabs{display:flex;gap:.5rem;}
+.mtab{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;padding:.55rem 1.3rem;border:1px solid rgba(107,63,26,.3);background:transparent;color:var(--brown);cursor:none;transition:all .3s;font-family:'Raleway',sans-serif;}
+.mtab.active,.mtab:hover{background:var(--crimson);color:var(--warm-white);border-color:var(--crimson);}
+.dish-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.8rem;}
+.dish-card{background:var(--warm-white);cursor:none;transition:transform .4s;}
+.dish-card:hover{transform:translateY(-7px);}
+.dish-img{position:relative;overflow:hidden;aspect-ratio:4/3;}
+.dish-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s;filter:saturate(1.1);}
+.dish-card:hover .dish-img img{transform:scale(1.08);}
+.dish-badge{position:absolute;top:.8rem;left:.8rem;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.3rem .75rem;font-weight:600;font-family:'Raleway',sans-serif;}
+.badge-veg{background:var(--cardamom);color:#fff;}
+.badge-nonveg{background:var(--crimson);color:#fff;}
+.badge-special{background:var(--gold);color:var(--ink);}
+.dish-heat{position:absolute;bottom:.7rem;right:.7rem;font-size:.8rem;color:var(--saffron);text-shadow:0 1px 4px rgba(0,0,0,.5);}
+.dish-body{padding:1.1rem 1.2rem 1.3rem;}
+.dish-region{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--saffron);margin-bottom:.25rem;}
+.dish-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:.4rem;}
+.dish-desc{font-size:.75rem;line-height:1.7;color:var(--brown-l);font-weight:300;margin-bottom:.9rem;}
+.dish-foot{display:flex;align-items:center;justify-content:space-between;}
+.dish-price{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--crimson);font-weight:700;}
+.dish-btn{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.45rem 1rem;background:var(--saffron);color:var(--ink);border:none;cursor:none;font-family:'Raleway',sans-serif;font-weight:600;transition:background .3s;}
+.dish-btn:hover{background:var(--turmeric);}
+
+/* SIGNATURE */
+#signature{background:var(--crimson);display:grid;grid-template-columns:1fr 1fr;padding:0;overflow:hidden;min-height:560px;}
+.sig-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.82);}
+.sig-content{padding:5rem;display:flex;flex-direction:column;justify-content:center;}
+.sig-content .s-label{color:var(--turmeric);}
+.sig-content .s-title{color:var(--warm-white);}
+.sig-content .s-title em{color:var(--turmeric);}
+.sig-desc{font-size:.85rem;line-height:1.95;color:rgba(253,246,236,.75);font-weight:300;margin:1.3rem 0 2rem;}
+.sig-price{font-family:'Playfair Display',serif;font-size:2rem;color:var(--turmeric);margin-bottom:2rem;}
+
+/* DESSERTS & DRINKS */
+#extras{background:var(--ink);}
+#extras .s-title{color:var(--warm-white);}
+#extras .s-label{color:var(--gold);}
+.extras-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;}
+.extra-card{position:relative;overflow:hidden;cursor:none;}
+.extra-img{aspect-ratio:3/4;overflow:hidden;}
+.extra-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s;filter:brightness(.88) saturate(1.1);}
+.extra-card:hover .extra-img img{transform:scale(1.06);}
+.extra-info{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(28,18,8,.96));padding:3rem 1.4rem 1.5rem;}
+.extra-cat{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--turmeric);margin-bottom:.3rem;}
+.extra-name{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--warm-white);margin-bottom:.3rem;}
+.extra-price{font-size:.95rem;color:var(--gold-l);font-weight:300;}
+
+/* GALLERY */
+#gallery{background:var(--parchment);}
+.gallery-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:280px 280px;gap:1rem;margin-top:2.5rem;}
+.gal-item{overflow:hidden;position:relative;cursor:none;}
+.gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .55s;filter:brightness(.9);}
+.gal-item:hover img{transform:scale(1.05);filter:brightness(1);}
+.gal-item:first-child{grid-row:1/3;}
+.gal-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(28,18,8,.75));padding:2rem 1.2rem 1rem;font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;color:var(--warm-white);opacity:0;transition:opacity .4s;}
+.gal-item:hover .gal-caption{opacity:1;}
+
+/* REVIEWS */
+#reviews{background:var(--cream);}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;}
+.review-card{background:var(--warm-white);padding:2rem 1.8rem;border-left:3px solid var(--saffron);transition:transform .35s;}
+.review-card:hover{transform:translateY(-5px);}
+.review-stars{color:var(--turmeric);font-size:1rem;margin-bottom:1rem;}
+.review-text{font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;line-height:1.8;color:var(--ink);margin-bottom:1.2rem;}
+.review-author{font-size:.72rem;letter-spacing:.12em;color:var(--brown-l);font-weight:500;}
+
+/* RESERVATION */
+#reservation{background:var(--cardamom);display:grid;grid-template-columns:1fr 1fr;padding:0;overflow:hidden;}
+.res-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.65) saturate(1.2);}
+.res-content{padding:5rem;}
+.res-content .s-label{color:var(--turmeric);}
+.res-content .s-title{color:var(--warm-white);}
+.res-form{margin-top:2rem;display:flex;flex-direction:column;gap:1rem;}
+.res-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.res-input,.res-select{width:100%;padding:.85rem 1.1rem;background:rgba(253,246,236,.08);border:1px solid rgba(253,246,236,.2);color:var(--warm-white);font-family:'Raleway',sans-serif;font-size:.82rem;outline:none;transition:border-color .3s;}
+.res-input::placeholder{color:rgba(253,246,236,.4);}
+.res-input:focus,.res-select:focus{border-color:var(--turmeric);}
+.res-select option{background:#2D4A3E;color:var(--warm-white);}
+.res-btn{padding:1rem;background:var(--saffron);color:var(--ink);border:none;cursor:none;font-family:'Raleway',sans-serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;transition:background .3s;margin-top:.5rem;}
+.res-btn:hover{background:var(--turmeric);}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(253,246,236,.6);padding:4rem 5rem 2rem;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-brand p{font-size:.78rem;line-height:1.8;font-weight:300;max-width:220px;margin-top:1rem;}
+.footer-col h4{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;font-weight:500;}
+.footer-col ul{list-style:none;}
+.footer-col li{margin-bottom:.55rem;}
+.footer-col a{font-size:.8rem;color:rgba(253,246,236,.55);text-decoration:none;font-weight:300;transition:color .3s;}
+.footer-col a:hover{color:var(--turmeric);}
+.footer-bottom{border-top:1px solid rgba(253,246,236,.08);padding-top:1.8rem;display:flex;justify-content:space-between;align-items:center;font-size:.68rem;color:rgba(253,246,236,.3);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .75s ease,transform .75s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.dish-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links,.nav-res{display:none;}
+  section{padding:4rem 1.5rem;}
+  #about,#signature,#reservation{grid-template-columns:1fr;}
+  .hero-content{padding:0 2rem;}
+  .hero-deco{display:none;}
+  .dish-grid{grid-template-columns:1fr 1fr;gap:1rem;}
+  .extras-grid,.reviews-grid{grid-template-columns:1fr;}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
+  .gal-item:first-child{grid-row:auto;grid-column:1/3;height:240px;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">RANG<span>O</span>LI</a>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#extras">Desserts</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#about">Our Story</a></li>
+  </ul>
+  <a href="#reservation" class="nav-res">Reserve a Table</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-deco"></div>
+  <div class="hero-content">
+    <p class="hero-tag">Authentic · Traditional · Soulful</p>
+    <h1 class="hero-h1">A Feast of<br/><em>Flavours</em> &amp;<br/>Heritage</h1>
+    <p class="hero-sub">From the royal kitchens of Rajasthan to the spice coast of Kerala — every dish at Rangoli is a love letter to India's extraordinary culinary tapestry.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-saffron">Explore Our Menu</a>
+      <a href="#reservation" class="btn-ghost">Book a Table</a>
+    </div>
+  </div>
+</section>
+
+<!-- SPICE STRIP -->
+<div class="spice-bar">
+  <div class="spice-inner">
+    <span>Butter Chicken</span><span>Biryani</span><span>Dal Makhani</span>
+    <span>Paneer Tikka</span><span>Rogan Josh</span><span>Gulab Jamun</span>
+    <span>Masala Chai</span><span>Naan &amp; Roti</span><span>Samosa</span>
+    <span>Butter Chicken</span><span>Biryani</span><span>Dal Makhani</span>
+    <span>Paneer Tikka</span><span>Rogan Josh</span><span>Gulab Jamun</span>
+    <span>Masala Chai</span><span>Naan &amp; Roti</span><span>Samosa</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap reveal">
+    <div class="about-corner-tl"></div>
+    <div class="about-corner-br"></div>
+    <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=700&q=80" alt="Chef at work"/>
+  </div>
+  <div class="about-content reveal">
+    <p class="s-label">Our Philosophy</p>
+    <h2 class="s-title">Recipes born in <em>grandmothers'</em> kitchens.</h2>
+    <p class="about-text">Founded in 2011, Rangoli has been Hyderabad's most beloved destination for authentic Indian cuisine. Our head chef, trained in Lucknow and Jaipur, brings royal recipes to your table using hand-ground masalas, fresh local produce, and slow-cooking methods passed down through generations.</p>
+    <p class="about-text" style="margin-top:1rem;">We believe food is culture. Every plate tells the story of a region, a season, and a family tradition.</p>
+    <div class="about-stats">
+      <div class="stat"><div class="stat-n">14+</div><div class="stat-l">Years of Service</div></div>
+      <div class="stat"><div class="stat-n">80+</div><div class="stat-l">Dishes on Menu</div></div>
+      <div class="stat"><div class="stat-n">4.9★</div><div class="stat-l">Customer Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <div>
+      <p class="s-label">Curated Selection</p>
+      <h2 class="s-title">Our <em>Signature</em> Dishes</h2>
+    </div>
+    <div class="menu-tabs">
+      <button class="mtab active" onclick="filterMenu('all',this)">All</button>
+      <button class="mtab" onclick="filterMenu('veg',this)">Veg</button>
+      <button class="mtab" onclick="filterMenu('nonveg',this)">Non-Veg</button>
+      <button class="mtab" onclick="filterMenu('special',this)">Chef's Special</button>
+    </div>
+  </div>
+
+  <div class="dish-grid" id="dishGrid">
+
+    <!-- 1 -->
+    <div class="dish-card" data-cat="nonveg special">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80" alt="Butter Chicken"/>
+        <span class="dish-badge badge-special">Chef's Special</span>
+        <span class="dish-heat">🌶🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">Punjabi</p>
+        <p class="dish-name">Murgh Makhani</p>
+        <p class="dish-desc">Tender chicken in a velvety tomato-butter gravy kissed with cream, fenugreek and aromatic spices.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹280</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="dish-card" data-cat="nonveg special">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&q=80" alt="Hyderabadi Biryani"/>
+        <span class="dish-badge badge-special">Chef's Special</span>
+        <span class="dish-heat">🌶🌶🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">Hyderabadi</p>
+        <p class="dish-name">Dum Biryani</p>
+        <p class="dish-desc">Aged basmati rice slow-cooked dum style with succulent mutton, saffron and caramelised onions.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹320</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="dish-card" data-cat="veg special">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?w=600&q=80" alt="Dal Makhani"/>
+        <span class="dish-badge badge-special">Chef's Special</span>
+        <span class="dish-heat">🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">Punjabi</p>
+        <p class="dish-name">Dal Makhani</p>
+        <p class="dish-desc">Black lentils simmered overnight with butter and cream. The soul of North Indian cooking.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹240</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="dish-card" data-cat="veg">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" alt="Paneer Tikka"/>
+        <span class="dish-badge badge-veg">Veg</span>
+        <span class="dish-heat">🌶🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">Mughlai</p>
+        <p class="dish-name">Paneer Tikka</p>
+        <p class="dish-desc">Cottage cheese marinated in yoghurt and spices, chargrilled in a traditional tandoor until smoky.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹300</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="dish-card" data-cat="nonveg">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1574653853027-5382a3d23a15?w=600&q=80" alt="Rogan Josh"/>
+        <span class="dish-badge badge-nonveg">Non-Veg</span>
+        <span class="dish-heat">🌶🌶🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">Kashmiri</p>
+        <p class="dish-name">Rogan Josh</p>
+        <p class="dish-desc">Slow-braised lamb in a fragrant Kashmiri chilli and whole-spice gravy. Rich, robust, unforgettable.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹260</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="dish-card" data-cat="veg">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Samosa"/>
+        <span class="dish-badge badge-veg">Veg</span>
+        <span class="dish-heat">🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">Street Food · All India</p>
+        <p class="dish-name">Crispy Samosa (4 pcs)</p>
+        <p class="dish-desc">Golden pastry cones filled with spiced potatoes and peas. Served with mint chutney and tamarind dip.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹120</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="dish-card" data-cat="nonveg">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=600&q=80" alt="Chicken Tikka Masala"/>
+        <span class="dish-badge badge-nonveg">Non-Veg</span>
+        <span class="dish-heat">🌶🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">Punjabi</p>
+        <p class="dish-name">Chicken Tikka Masala</p>
+        <p class="dish-desc">Tandoor-roasted chicken in a luscious masala sauce with tomatoes, cream and garam masala.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹250</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="dish-card" data-cat="veg special">
+      <div class="dish-img">
+        <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80" alt="Palak Paneer"/>
+        <span class="dish-badge badge-veg">Veg</span>
+        <span class="dish-heat">🌶</span>
+      </div>
+      <div class="dish-body">
+        <p class="dish-region">North Indian</p>
+        <p class="dish-name">Palak Paneer</p>
+        <p class="dish-desc">Fresh cottage cheese cubes in a vibrant pureed spinach sauce spiced with ginger, garlic and cumin.</p>
+        <div class="dish-foot">
+          <span class="dish-price">₹300</span>
+          <button class="dish-btn">Order Now</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SIGNATURE FEATURE -->
+<section id="signature">
+  <div class="sig-img">
+    <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=900&q=85" alt="Tandoori Platter"/>
+  </div>
+  <div class="sig-content reveal">
+    <p class="s-label">Tonight's Centrepiece</p>
+    <h2 class="s-title">The Royal <em>Tandoori</em> Grand Platter</h2>
+    <p class="sig-desc">A magnificent sharing platter for two — whole tandoori chicken, seekh kebabs, reshmi tikka, malai boti and lamb chops, all kissed by the fierce heat of our clay oven. Served with four chutneys, laccha paratha and a saffron raita.</p>
+    <div class="sig-price">₹1,450 <span style="font-size:1rem;opacity:.7;">for two</span></div>
+    <a href="#reservation" class="btn-saffron">Reserve &amp; Pre-Order</a>
+  </div>
+</section>
+
+<!-- DESSERTS & DRINKS -->
+<section id="extras">
+  <div class="reveal">
+    <p class="s-label">Sweet Endings &amp; Elixirs</p>
+    <h2 class="s-title" style="color:var(--warm-white);">Desserts &amp; <em style="color:var(--turmeric);">Drinks</em></h2>
+  </div>
+  <div class="extras-grid">
+
+    <div class="extra-card reveal">
+      <div class="extra-img">
+        <img src="file:///C:/Users/RK/Downloads/GJ" alt="Gulab Jamun"/>
+      </div>
+      <div class="extra-info">
+        <p class="extra-cat">Desserts</p>
+        <p class="extra-name">Gulab Jamun</p>
+        <p class="extra-price">₹120</p>
+      </div>
+    </div>
+
+    <div class="extra-card reveal" style="transition-delay:.15s">
+      <div class="extra-img">
+        <img src="file:///C:/Users/RK/Downloads/RM" alt="Rasmalai"/>
+      </div>
+      <div class="extra-info">
+        <p class="extra-cat">Desserts</p>
+        <p class="extra-name">Rasmalai</p>
+        <p class="extra-price">₹100</p>
+      </div>
+    </div>
+
+    <div class="extra-card reveal" style="transition-delay:.3s">
+      <div class="extra-img">
+        <img src="file:///C:/Users/RK/Downloads/PK" alt="Kulfi"/>
+      </div>
+      <div class="extra-info">
+        <p class="extra-cat">Frozen Desserts</p>
+        <p class="extra-name">Pista Kulfi</p>
+        <p class="extra-price">₹60</p>
+      </div>
+    </div>
+
+    <div class="extra-card reveal" style="transition-delay:.1s">
+      <div class="extra-img">
+        <img src="file:///C:/Users/RK/Downloads/ML" alt="Mango Lassi"/>
+      </div>
+      <div class="extra-info">
+        <p class="extra-cat">Drinks</p>
+        <p class="extra-name">Mango Lassi</p>
+        <p class="extra-price">₹100</p>
+      </div>
+    </div>
+
+    <div class="extra-card reveal" style="transition-delay:.25s">
+      <div class="extra-img">
+        <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Masala Chai"/>
+      </div>
+      <div class="extra-info">
+        <p class="extra-cat">Hot Beverages</p>
+        <p class="extra-name">Masala Chai</p>
+        <p class="extra-price">₹25</p>
+      </div>
+    </div>
+
+    <div class="extra-card reveal" style="transition-delay:.4s">
+      <div class="extra-img">
+        <img src="file:///C:/Users/RK/Downloads/ST" alt="Shahi Tukda"/>
+      </div>
+      <div class="extra-info">
+        <p class="extra-cat">Desserts</p>
+        <p class="extra-name">Shahi Tukda</p>
+        <p class="extra-price">₹210</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="reveal">
+    <p class="s-label">Ambiance &amp; Atmosphere</p>
+    <h2 class="s-title">Inside <em>Rangoli</em></h2>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gal-item">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80" alt="Restaurant interior"/>
+      <div class="gal-caption">The Grand Dining Hall</div>
+    </div>
+    <div class="gal-item">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Food presentation"/>
+      <div class="gal-caption">Artful Plating</div>
+    </div>
+    <div class="gal-item">
+      <img src="https://images.unsplash.com/photo-1505935428862-770b6f24f629?w=600&q=80" alt="Spices"/>
+      <div class="gal-caption">Our Spice Library</div>
+    </div>
+    <div class="gal-item">
+      <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80" alt="Bar area"/>
+      <div class="gal-caption">The Drinks Counter</div>
+    </div>
+    <div class="gal-item">
+      <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80" alt="Food spread"/>
+      <div class="gal-caption">Festive Thali Spread</div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="reveal" style="text-align:center;">
+    <p class="s-label">What Our Guests Say</p>
+    <h2 class="s-title">Voices of <em>Delight</em></h2>
+  </div>
+  <div class="reviews-grid">
+
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"The Dum Biryani transported me straight to the lanes of old Hyderabad. Absolutely spectacular — I have not tasted anything like it outside my grandmother's home."</p>
+      <p class="review-author">— Priya Menon, Hyderabad</p>
+    </div>
+
+    <div class="review-card reveal" style="transition-delay:.15s">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Rangoli is the finest Indian dining experience I have had anywhere in India. The tandoori platter alone is worth the trip. The ambiance is warm, royal and unforgettable."</p>
+      <p class="review-author">— Arjun Sharma, Mumbai</p>
+    </div>
+
+    <div class="review-card reveal" style="transition-delay:.3s">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"As a food writer, I dine out 300 days a year. Rangoli's Dal Makhani is genuinely one of the top five dishes I have eaten this decade. Perfection in a bowl."</p>
+      <p class="review-author">— Kavitha Rao, Food &amp; Travel Magazine</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section id="reservation">
+  <div class="res-img">
+    <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=900&q=80" alt="Table setting"/>
+  </div>
+  <div class="res-content reveal">
+    <p class="s-label">Join Us</p>
+    <h2 class="s-title" style="color:var(--warm-white);">Reserve Your <em style="color:var(--turmeric);">Table</em></h2>
+    <p style="font-size:.82rem;color:rgba(253,246,236,.65);font-weight:300;margin-top:1rem;line-height:1.8;">We are open daily — Lunch 12:00–3:30 PM · Dinner 7:00–11:00 PM</p>
+    <div class="res-form">
+      <div class="res-row">
+        <input class="res-input" type="text" placeholder="Your Name"/>
+        <input class="res-input" type="tel" placeholder="Phone Number"/>
+      </div>
+      <div class="res-row">
+        <input class="res-input" type="date"/>
+        <select class="res-select">
+          <option value="">Select Time</option>
+          <option>12:00 PM</option><option>12:30 PM</option>
+          <option>1:00 PM</option><option>1:30 PM</option>
+          <option>7:00 PM</option><option>7:30 PM</option>
+          <option>8:00 PM</option><option>8:30 PM</option>
+          <option>9:00 PM</option><option>9:30 PM</option>
+        </select>
+      </div>
+      <div class="res-row">
+        <select class="res-select">
+          <option value="">Guests</option>
+          <option>1 Guest</option><option>2 Guests</option>
+          <option>3 Guests</option><option>4 Guests</option>
+          <option>5 Guests</option><option>6+ Guests</option>
+        </select>
+        <select class="res-select">
+          <option value="">Occasion</option>
+          <option>Birthday</option><option>Anniversary</option>
+          <option>Business Dinner</option><option>Date Night</option>
+          <option>Family Gathering</option><option>Other</option>
+        </select>
+      </div>
+      <input class="res-input" type="text" placeholder="Special Requests (optional)"/>
+      <button class="res-btn" onclick="handleReservation()">Confirm Reservation</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--turmeric);text-decoration:none;letter-spacing:.08em;">RANG<span style="color:var(--saffron);">O</span>LI</a>
+      <p>Authentic Indian cuisine crafted with love, tradition and the finest hand-ground spices. Hyderabad's home of heritage flavours since 2011.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#menu">Our Menu</a></li>
+        <li><a href="#extras">Desserts &amp; Drinks</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#about">Our Story</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Visit Us</h4>
+      <ul>
+        <li><a href="#">Banjara Hills, Hyderabad</a></li>
+        <li><a href="#">Lunch: 12:00 – 3:30 PM</a></li>
+        <li><a href="#">Dinner: 7:00 – 11:00 PM</a></li>
+        <li><a href="#">+91 98765 43210</a></li>
+        <li><a href="#">info@rangoli.in</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Follow</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Zomato</a></li>
+        <li><a href="#">Swiggy</a></li>
+        <li><a href="#">Google Maps</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Rangoli Restaurant, Hyderabad. All rights reserved.</span>
+    <span>Privacy Policy · Terms · Sitemap</span>
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+function animCursor() {
+  cur.style.left  = mx+'px'; cur.style.top  = my+'px';
+  rx += (mx-rx)*.13; ry += (my-ry)*.13;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// Nav shrink
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.style.padding = window.scrollY > 60 ? '1rem 4rem' : '1.4rem 4rem';
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Menu filter
+function filterMenu(cat, btn) {
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.dish-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat.includes(cat)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// Reservation
+function handleReservation() {
+  const btn = document.querySelector('.res-btn');
+  btn.textContent = '✓ Reservation Confirmed!';
+  btn.style.background = '#2D4A3E';
+  btn.style.color = '#F5ECD8';
+  setTimeout(() => {
+    btn.textContent = 'Confirm Reservation';
+    btn.style.background = '';
+    btn.style.color = '';
+  }, 3500);
+}
+</script>
+</body>
+</html>
